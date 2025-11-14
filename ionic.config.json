@@ -1,0 +1,7 @@
+{
+  "name": "MovieHunt",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
