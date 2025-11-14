@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar color="black">
+    <ion-title>{{ movie?.title || 'Detalhes' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="movie-details" fullscreen>
+  <div *ngIf="movie" class="details-card">
+    <ion-card>
+      <img [src]="'https://image.tmdb.org/t/p/w300' + movie.poster_path" alt="{{ movie.title }}" />
+      <ion-card-header>
+        <ion-card-title>{{ movie.title }} ({{ getYear() }})</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label>Duração</ion-label>
+          <div>{{ getRuntime() }}</div>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Direção</ion-label>
+          <div>{{ getDirector() }}</div>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Produção</ion-label>
+          <div>{{ getProduction() }}</div>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Elenco</ion-label>
+          <div>
+            <span *ngFor="let c of getMainCast(); let i = index">
+              {{ c.name }}<span *ngIf="i < getMainCast().length - 1">, </span>
+            </span>
+          </div>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Avaliação</ion-label>
+          <div class="stars">
+            <ion-icon name="star" *ngFor="let s of stars"></ion-icon>
+            <span class="rating">{{ movie.vote_average }}/10</span>
+          </div>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div *ngIf="!movie" class="loading">Carregando...</div>
+</ion-content>

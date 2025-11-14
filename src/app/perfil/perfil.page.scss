@@ -1,0 +1,27 @@
+.perfil-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  width: 90%;
+  max-width: 420px;
+  padding: 16px;
+}
+
+.actions {
+  margin-top: 16px;
+}
+
+.mode-toggle {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 12px;
+}
+
+.error {
+  color: var(--ion-color-danger, #f53d3d);
+  margin-top: 12px;
+  text-align: center;
+}

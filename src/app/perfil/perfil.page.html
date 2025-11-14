@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar color="black">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/index"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Entrar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="perfil-page" fullscreen>
+  <div class="login-card">
+    <div class="mode-toggle">
+      <ion-button fill="clear" [color]="!showRegister ? 'primary' : 'medium'" (click)="toggleMode(false)">Entrar</ion-button>
+      <ion-button fill="clear" [color]="showRegister ? 'primary' : 'medium'" (click)="toggleMode(true)">Criar conta</ion-button>
+    </div>
+
+    <div *ngIf="!showRegister">
+      <ion-item>
+        <ion-label position="stacked">E-mail</ion-label>
+        <ion-input type="email" [(ngModel)]="email" placeholder="seu@email.com"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Senha</ion-label>
+        <ion-input type="password" [(ngModel)]="password" placeholder="••••••"></ion-input>
+      </ion-item>
+
+      <div class="actions">
+        <ion-button expand="block" color="primary" (click)="login()">Entrar</ion-button>
+      </div>
+    </div>
+
+    <div *ngIf="showRegister">
+      <ion-item>
+        <ion-label position="stacked">Nome</ion-label>
+        <ion-input type="text" [(ngModel)]="nome" placeholder="Seu nome completo"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">CPF</ion-label>
+        <ion-input type="text" [(ngModel)]="cpf" placeholder="000.000.000-00"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Ano de nascimento</ion-label>
+        <ion-input type="number" [(ngModel)]="anoNascimento" placeholder="1990"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">E-mail</ion-label>
+        <ion-input type="email" [(ngModel)]="regEmail" placeholder="seu@email.com"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Senha</ion-label>
+        <ion-input type="password" [(ngModel)]="regPassword" placeholder="••••••"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Confirmar senha</ion-label>
+        <ion-input type="password" [(ngModel)]="regConfirmPassword" placeholder="••••••"></ion-input>
+      </ion-item>
+
+      <div class="actions">
+        <ion-button expand="block" color="primary" (click)="createAccount()">Criar conta</ion-button>
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  </div>
+</ion-content>

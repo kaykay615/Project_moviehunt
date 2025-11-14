@@ -1,0 +1,92 @@
+.home-page {
+  --background: #000;
+  display: flex;
+  flex-direction: column;
+
+  .search-container {
+    padding: 10px 16px;
+  }
+
+  .custom-searchbar {
+    --background: transparent;
+    --border-color: #7a1c1c;
+    --color: #fff;
+    --placeholder-color: #a23a3a;
+    --icon-color: #7a1c1c;
+    border: 1px solid #7a1c1c;
+    border-radius: 8px;
+  }
+
+  .placeholder {
+    color: #a23a3a;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .section-title {
+    color: #7a1c1c;
+    font-weight: bold;
+    margin: 16px 0 8px 16px;
+    font-size: 1.2rem;
+  }
+
+  /* Scroll horizontal para filmes de ação */
+  .movie-scroll-horizontal {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-left: 16px;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch; /* rolagem suave iOS */
+  }
+
+  .movie-scroll-horizontal::-webkit-scrollbar {
+  display: none; /* Chrome, Safari e Edge */
+}
+
+  .movie-card {
+    min-width: 120px; /* largura fixa do card */
+    flex: 0 0 auto;   /* impede o card de encolher */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;        /* largura fixa de todos os cartazes */
+    height: 220px;
+
+    img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 4px;
+    }
+
+    p {
+      font-size: 0.85rem;
+      text-align: center;
+      color: #fff;
+    }
+  }
+}
+
+ion-title {
+  color: #7a1c1c;
+}
+
+ion-header {
+  --background: #000;
+}
+
+/* CSS simples para os tabs */
+ion-tab-bar {
+  --background: #7a1c1c !important;
+}
+
+ion-tab-button {
+  --color: black;
+  --color-selected: black;
+}
+
+ion-tab-button.tab-selected {
+  ion-icon, ion-label {
+    color: black !important;
+  }
+}
