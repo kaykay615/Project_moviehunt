@@ -48,4 +48,15 @@
   </div>
 
   <div *ngIf="!movie" class="loading">Carregando...</div>
+<div *ngIf="cinemas.length > 0" class="cinemas-container">
+  <h2>Cinemas Próximos</h2>
+
+  <ion-item *ngFor="let cinema of cinemas">
+    <ion-label>{{ cinema.name }}</ion-label>
+
+    <ion-button slot="end" (click)="abrirNoGoogleMaps(cinema)">
+      Ver no Maps
+    </ion-button>
+  </ion-item>
+</div>
 </ion-content>

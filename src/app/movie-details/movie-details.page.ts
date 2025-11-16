@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PlacesService } from '../services/places';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -42,7 +43,7 @@ export class MovieDetailsPage implements OnInit {
   movie: any = null;
   stars: number[] = [];
 
-  constructor(private route: ActivatedRoute, private tmdb: TmdbService) {}
+  constructor(private route: ActivatedRoute, private tmdb: TmdbService, private placesService: PlacesService) {}
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -53,6 +54,7 @@ export class MovieDetailsPage implements OnInit {
         this.stars = Array.from({ length: starCount });
       });
     }
+    this.pegarLocalizacao();
   }
 
   getYear() {
@@ -74,4 +76,36 @@ export class MovieDetailsPage implements OnInit {
   getRuntime() {
     return this.movie?.runtime ? `${this.movie.runtime} min` : '';
   }
+
+cinemas: any[] = []; // ADICIONE ISSO
+
+pegarLocalizacao() {
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      this.placesService.getNearbyCinemas(lat, lng)
+        .subscribe((res: any) => {
+          const top3 = res.results.slice(0, 3);
+          this.cinemas = top3; // SALVA PARA EXIBIR NA TELA
+
+          console.log("Top 3 cinemas:", this.cinemas);
+        });
+    },
+    (err) => {
+      console.error('Erro ao pegar localização:', err);
+    }
+  );
 }
+
+abrirNoGoogleMaps(cinema: any) {
+  const lat = cinema.geometry.location.lat;
+  const lng = cinema.geometry.location.lng;
+
+  const url = `https://www.google.com/maps?q=${lat},${lng}`;
+
+  window.open(url, "_blank");
+}
+}
+
