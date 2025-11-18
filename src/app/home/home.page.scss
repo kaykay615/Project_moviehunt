@@ -112,3 +112,85 @@ ion-tab-button.tab-selected {
   color: white;
 }
 
+.search-results-container {
+  padding: 16px;
+}
+
+/* Lista vertical */
+.movie-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Item da lista */
+.movie-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: #111;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+
+.movie-item:hover {
+  transform: scale(1.02);
+}
+
+/* Poster */
+.movie-item .poster {
+  width: 100px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Infos */
+.movie-item .info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.movie-item .info h3 {
+  color: #fff;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.movie-item .overview {
+  margin-top: 4px;
+  color: #ccc;
+  font-size: 0.8rem;
+  max-height: 3.2em;
+  overflow: hidden;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin: 20px 0;
+  color: #fff;
+}
+
+.pagination button {
+  background: #7a1c1c;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+}
+
+.pagination span {
+  color: #fff;
+  font-size: 0.9rem;
+}
+

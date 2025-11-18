@@ -33,11 +33,11 @@ export class TmdbService {
     );
   }
 
-  // Busca por nome
-  getMoviesByQuery(query: string): Observable<any> {
-    const q = encodeURIComponent(query);
-    return this.http.get(`${this.baseUrl}/search/movie?api_key=${this.apiKey}&language=pt-BR&query=${q}`);
-  }
+  getMoviesByQuery(query: string, page: number = 1) {
+  return this.http.get(
+    `${this.baseUrl}/search/movie?query=${query}&page=${page}&api_key=${this.apiKey}&language=pt-BR`
+  );
+}
 
 getMoviesByGenre(genreId: number, page: number = 1): Observable<any> {
   return this.http.get(

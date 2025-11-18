@@ -36,53 +36,78 @@ import { TmdbService } from '../services/tmdb.service';
   ]
 })
 export class HomePage implements OnInit {
+
   actionMovies: any[] = [];
   romanceMovies: any[] = [];
   horrorMovies: any[] = [];
 
-  maxMovies = 10;
+  // Controle da busca
+  searchActive = false;
+  searchResults: any[] = [];
+  searchQuery = '';
+  currentSearchPage = 1;
+  totalSearchPages = 1;
+
   private searchTimeout: any = null;
 
   constructor(private tmdb: TmdbService) {}
 
   ngOnInit() {
-    // Ação
+    this.loadMainSections();
+  }
+
+  loadMainSections() {
     this.tmdb.getActionMovies().subscribe((res: any) => {
-      this.actionMovies = res.results.slice(0, this.maxMovies);
+      this.actionMovies = res.results.slice(0, 10);
     });
 
-    // Romance
     this.tmdb.getRomanceMovies().subscribe((res: any) => {
-      this.romanceMovies = res.results.slice(0, this.maxMovies);
+      this.romanceMovies = res.results.slice(0, 10);
     });
 
-    // Terror
     this.tmdb.getHorrorMovies().subscribe((res: any) => {
-      this.horrorMovies = res.results.slice(0, this.maxMovies);
+      this.horrorMovies = res.results.slice(0, 10);
     });
   }
 
   onSearch(event: any) {
-    const value = event?.detail?.value ?? event?.target?.value ?? '';
-    const query = (value || '').trim();
+    const value = event?.detail?.value ?? '';
+    const query = value.trim();
 
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
+    if (this.searchTimeout) clearTimeout(this.searchTimeout);
 
     this.searchTimeout = setTimeout(() => {
       if (!query) {
-        // Se vazio → restaura APENAS filmes de ação (sessão principal)
-        this.tmdb.getActionMovies().subscribe((res: any) => {
-          this.actionMovies = res.results.slice(0, this.maxMovies);
-        });
+        this.searchActive = false;
+        this.searchResults = [];
         return;
       }
 
-      // Busca substitui apenas a primeira sessão
-      this.tmdb.getMoviesByQuery(query).subscribe((res: any) => {
-        this.actionMovies = (res.results || []).slice(0, this.maxMovies);
-      });
+      this.searchActive = true;
+      this.searchQuery = query;
+      this.loadSearchResults(1);
+
     }, 300);
   }
+
+  loadSearchResults(page: number) {
+    this.tmdb.getMoviesByQuery(this.searchQuery, page).subscribe((res: any) => {
+      this.searchResults = res.results;
+      this.currentSearchPage = page;
+      this.totalSearchPages = res.total_pages;
+    });
+  }
+
+  nextSearchPage() {
+    if (this.currentSearchPage < this.totalSearchPages) {
+      this.loadSearchResults(this.currentSearchPage + 1);
+    }
+  }
+
+  previousSearchPage() {
+    if (this.currentSearchPage > 1) {
+      this.loadSearchResults(this.currentSearchPage - 1);
+    }
+  }
+
 }
