@@ -15,9 +15,6 @@
     ></ion-searchbar>
   </div>
 
-  <!-- ============================= -->
-  <!--   LISTA DE BUSCA (ESTILO GENRE)  -->
-  <!-- ============================= -->
   <div *ngIf="searchActive" class="movie-list">
 
     <div *ngFor="let movie of searchResults" 
@@ -34,7 +31,6 @@
 
     </div>
 
-    <!-- PAGINAÇÃO -->
     <div class="pagination" *ngIf="totalSearchPages > 1">
       <button (click)="previousSearchPage()" [disabled]="currentSearchPage === 1">Anterior</button>
       <span>Página {{ currentSearchPage }} / {{ totalSearchPages }}</span>
@@ -43,9 +39,6 @@
 
   </div>
 
-  <!-- ============================= -->
-  <!--   CONTEÚDO NORMAL DA HOME    -->
-  <!-- ============================= -->
   <div *ngIf="!searchActive">
 
     <div class="genre-buttons">
