@@ -27,7 +27,7 @@
     color: #7a1c1c;
     font-weight: bold;
     margin: 16px 0 8px 16px;
-    font-size: 1.2rem;
+    font-size: 1.6rem;
   }
 
   /* Scroll horizontal para filmes de ação */
@@ -51,7 +51,7 @@
     flex-direction: column;
     align-items: center;
     width: 120px;        /* largura fixa de todos os cartazes */
-    height: 220px;
+    height: 250px;
 
     img {
       width: 100%;
@@ -75,6 +75,10 @@ ion-header {
   --background: #000;
 }
 
+ion-toolbar{
+  background-color: black;
+}
+
 /* CSS simples para os tabs */
 ion-tab-bar {
   --background: #7a1c1c !important;
@@ -90,3 +94,21 @@ ion-tab-button.tab-selected {
     color: black !important;
   }
 }
+
+.genre-buttons {
+  display: flex;
+  gap: 12px;
+  padding: 0 16px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.genre-btn {
+  background: #b43838;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-weight: bold;
+  border: none;
+  color: white;
+}
+

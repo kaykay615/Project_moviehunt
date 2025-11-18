@@ -24,4 +24,9 @@ export const routes: Routes = [
     path: 'movie/:id',
     loadComponent: () => import('./movie-details/movie-details.page').then(m => m.MovieDetailsPage),
   },
+  {
+  path: 'genre/:id',
+  loadComponent: () => import('./genre/genre.page').then(m => m.GenrePage)
+  },
+
 ];

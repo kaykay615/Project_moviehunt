@@ -28,3 +28,18 @@
   padding: 24px;
   text-align: center;
 }
+
+ion-tab-bar {
+  --background: #7a1c1c !important;
+}
+
+ion-tab-button {
+  --color: black;
+  --color-selected: black;
+}
+
+ion-tab-button.tab-selected {
+  ion-icon, ion-label {
+    color: black !important;
+  }
+}

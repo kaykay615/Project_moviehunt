@@ -37,16 +37,28 @@ import { TmdbService } from '../services/tmdb.service';
 })
 export class HomePage implements OnInit {
   actionMovies: any[] = [];
-  maxMovies = 10; // <-- limite de filmes que serão exibidos
-    private searchTimeout: any = null;
+  romanceMovies: any[] = [];
+  horrorMovies: any[] = [];
+
+  maxMovies = 10;
+  private searchTimeout: any = null;
 
   constructor(private tmdb: TmdbService) {}
 
   ngOnInit() {
+    // Ação
     this.tmdb.getActionMovies().subscribe((res: any) => {
-      console.log('📽️ Filmes de ação recebidos:', res);
-      // Limita a quantidade de filmes exibidos
       this.actionMovies = res.results.slice(0, this.maxMovies);
+    });
+
+    // Romance
+    this.tmdb.getRomanceMovies().subscribe((res: any) => {
+      this.romanceMovies = res.results.slice(0, this.maxMovies);
+    });
+
+    // Terror
+    this.tmdb.getHorrorMovies().subscribe((res: any) => {
+      this.horrorMovies = res.results.slice(0, this.maxMovies);
     });
   }
 
@@ -54,20 +66,20 @@ export class HomePage implements OnInit {
     const value = event?.detail?.value ?? event?.target?.value ?? '';
     const query = (value || '').trim();
 
-    // debounce rápido para evitar muitas requisições
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }
 
     this.searchTimeout = setTimeout(() => {
       if (!query) {
-        // se vazio, volta para os filmes de ação
+        // Se vazio → restaura APENAS filmes de ação (sessão principal)
         this.tmdb.getActionMovies().subscribe((res: any) => {
           this.actionMovies = res.results.slice(0, this.maxMovies);
         });
         return;
       }
 
+      // Busca substitui apenas a primeira sessão
       this.tmdb.getMoviesByQuery(query).subscribe((res: any) => {
         this.actionMovies = (res.results || []).slice(0, this.maxMovies);
       });

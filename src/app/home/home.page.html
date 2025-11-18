@@ -5,6 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="home-page">
+
   <div class="search-container">
     <ion-searchbar
       placeholder="Buscar filmes..."
@@ -14,6 +15,15 @@
       debounce="300"
     ></ion-searchbar>
   </div>
+
+  <div class="genre-buttons">
+  <button class="genre-btn" [routerLink]="['/genre', 28]">Ação</button>
+  <button class="genre-btn" [routerLink]="['/genre', 27]">Terror</button>
+  <button class="genre-btn" [routerLink]="['/genre', 10749]">Romance</button>
+  </div>
+
+
+  <!-- FILMES DE AÇÃO -->
   <h2 class="section-title">Filmes de Ação</h2>
   <div class="movie-scroll-horizontal">
     <div *ngFor="let movie of actionMovies" class="movie-card">
@@ -23,6 +33,29 @@
       </a>
     </div>
   </div>
+
+  <!-- FILMES DE ROMANCE -->
+  <h2 class="section-title">Filmes de Romance</h2>
+  <div class="movie-scroll-horizontal">
+    <div *ngFor="let movie of romanceMovies" class="movie-card">
+      <a [routerLink]="['/movie', movie.id]" class="movie-link">
+        <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" alt="{{ movie.title }}" />
+        <p>{{ movie.title }}</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- FILMES DE TERROR -->
+  <h2 class="section-title">Filmes de Terror</h2>
+  <div class="movie-scroll-horizontal">
+    <div *ngFor="let movie of horrorMovies" class="movie-card">
+      <a [routerLink]="['/movie', movie.id]" class="movie-link">
+        <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" alt="{{ movie.title }}" />
+        <p>{{ movie.title }}</p>
+      </a>
+    </div>
+  </div>
+
 </ion-content>
 
 <ion-tab-bar slot="bottom">
@@ -31,7 +64,7 @@
     <ion-label>Favoritos</ion-label>
   </ion-tab-button>
 
-  <ion-tab-button tab="home" routerLink="/index">
+  <ion-tab-button tab="home" routerLink="/home">
     <ion-icon name="home"></ion-icon>
     <ion-label>Home</ion-label>
   </ion-tab-button>
@@ -40,4 +73,4 @@
     <ion-icon name="person"></ion-icon>
     <ion-label>Perfil</ion-label>
   </ion-tab-button>
-</ion-tab-bar> 
+</ion-tab-bar>

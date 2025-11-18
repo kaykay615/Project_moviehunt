@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PlacesService } from '../services/places';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import {
   IonHeader,
   IonToolbar,
@@ -15,6 +16,9 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
+  IonTabs, 
+  IonTabBar, 
+  IonTabButton,
 } from '@ionic/angular/standalone';
 import { TmdbService } from '../services/tmdb.service';
 
@@ -24,6 +28,7 @@ import { TmdbService } from '../services/tmdb.service';
   styleUrls: ['movie-details.page.scss'],
   standalone: true,
   imports: [
+    RouterModule,
     CommonModule,
     IonHeader,
     IonToolbar,
@@ -36,7 +41,10 @@ import { TmdbService } from '../services/tmdb.service';
     IonButton,
     IonIcon,
     IonItem,
-    IonLabel,
+    IonLabel, 
+    IonTabs, 
+    IonTabBar, 
+    IonTabButton,
   ],
 })
 export class MovieDetailsPage implements OnInit {
@@ -77,7 +85,7 @@ export class MovieDetailsPage implements OnInit {
     return this.movie?.runtime ? `${this.movie.runtime} min` : '';
   }
 
-cinemas: any[] = []; // ADICIONE ISSO
+cinemas: any[] = [];
 
 pegarLocalizacao() {
   navigator.geolocation.getCurrentPosition(
@@ -88,7 +96,7 @@ pegarLocalizacao() {
       this.placesService.getNearbyCinemas(lat, lng)
         .subscribe((res: any) => {
           const top3 = res.results.slice(0, 3);
-          this.cinemas = top3; // SALVA PARA EXIBIR NA TELA
+          this.cinemas = top3;
 
           console.log("Top 3 cinemas:", this.cinemas);
         });
