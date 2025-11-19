@@ -26,6 +26,26 @@ export class TmdbService {
     return this.http.get(`${this.baseUrl}/discover/movie?api_key=${this.apiKey}&with_genres=27&language=pt-BR`);
   }
 
+  getComedyMovies(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/discover/movie?api_key=${this.apiKey}&with_genres=35&language=pt-BR`);
+  }
+
+  getFicMovies(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/discover/movie?api_key=${this.apiKey}&with_genres=878&language=pt-BR`);
+  }
+
+  getDramaMovies(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/discover/movie?api_key=${this.apiKey}&with_genres=18&language=pt-BR`);
+  }
+
+  getAniMovies(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/discover/movie?api_key=${this.apiKey}&with_genres=16&language=pt-BR`);
+  }
+
+  getAvenMovies(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/discover/movie?api_key=${this.apiKey}&with_genres=12&language=pt-BR`);
+  }
+
   // Buscar detalhes do filme
   getMovieDetails(movieId: number): Observable<any> {
     return this.http.get(

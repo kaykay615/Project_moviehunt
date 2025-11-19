@@ -40,6 +40,11 @@ export class HomePage implements OnInit {
   actionMovies: any[] = [];
   romanceMovies: any[] = [];
   horrorMovies: any[] = [];
+  comedyMovies: any[] = [];
+  ficMovies: any[] = [];
+  dramaMovies: any[] = []; 
+  aniMovies: any[] = [];
+  avenMovies: any[] = [];
 
   // Controle da busca
   searchActive = false;
@@ -58,15 +63,35 @@ export class HomePage implements OnInit {
 
   loadMainSections() {
     this.tmdb.getActionMovies().subscribe((res: any) => {
-      this.actionMovies = res.results.slice(0, 10);
+      this.actionMovies = res.results.slice(0, 20);
     });
 
     this.tmdb.getRomanceMovies().subscribe((res: any) => {
-      this.romanceMovies = res.results.slice(0, 10);
+      this.romanceMovies = res.results.slice(0, 20);
     });
 
     this.tmdb.getHorrorMovies().subscribe((res: any) => {
-      this.horrorMovies = res.results.slice(0, 10);
+      this.horrorMovies = res.results.slice(0, 20);
+    });
+
+    this.tmdb.getComedyMovies().subscribe((res: any) => {
+      this.comedyMovies = res.results.slice(0, 20);
+    });
+
+    this.tmdb.getFicMovies().subscribe((res: any) => {
+      this.ficMovies = res.results.slice(0, 20);
+    });
+
+    this.tmdb.getDramaMovies().subscribe((res: any) => {
+      this.dramaMovies = res.results.slice(0, 20);
+    });
+
+    this.tmdb.getAniMovies().subscribe((res: any) => {
+      this.aniMovies = res.results.slice(0, 20);
+    });
+
+    this.tmdb.getAvenMovies().subscribe((res: any) => {
+      this.avenMovies = res.results.slice(0, 20);
     });
   }
 

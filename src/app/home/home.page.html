@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="home-page">
+<ion-content class="home-page">
 
   <div class="search-container">
     <ion-searchbar
@@ -45,6 +45,11 @@
       <button class="genre-btn" [routerLink]="['/genre', 28]">Ação</button>
       <button class="genre-btn" [routerLink]="['/genre', 27]">Terror</button>
       <button class="genre-btn" [routerLink]="['/genre', 10749]">Romance</button>
+      <button class="genre-btn" [routerLink]="['/genre', 35]">Comédia</button>
+      <button class="genre-btn" [routerLink]="['/genre', 878]">Ficção</button>
+      <button class="genre-btn" [routerLink]="['/genre', 18]">Drama</button>
+      <button class="genre-btn" [routerLink]="['/genre', 16]">Animação</button>
+      <button class="genre-btn" [routerLink]="['/genre', 12]">Aventura</button>
     </div>
 
     <h2 class="section-title">Filmes de Ação</h2>
@@ -70,6 +75,56 @@
     <h2 class="section-title">Filmes de Terror</h2>
     <div class="movie-scroll-horizontal">
       <div *ngFor="let movie of horrorMovies" class="movie-card">
+        <a [routerLink]="['/movie', movie.id]">
+          <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" />
+          <p>{{ movie.title }}</p>
+        </a>
+      </div>
+    </div>
+
+    <h2 class="section-title">Filmes de Comédia</h2>
+    <div class="movie-scroll-horizontal">
+      <div *ngFor="let movie of comedyMovies" class="movie-card">
+        <a [routerLink]="['/movie', movie.id]">
+          <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" />
+          <p>{{ movie.title }}</p>
+        </a>
+      </div>
+    </div>
+
+    <h2 class="section-title">Filmes de Ficção Científica</h2>
+    <div class="movie-scroll-horizontal">
+      <div *ngFor="let movie of ficMovies" class="movie-card">
+        <a [routerLink]="['/movie', movie.id]">
+          <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" />
+          <p>{{ movie.title }}</p>
+        </a>
+      </div>
+    </div>
+
+    <h2 class="section-title">Filmes de Drama</h2>
+    <div class="movie-scroll-horizontal">
+      <div *ngFor="let movie of dramaMovies" class="movie-card">
+        <a [routerLink]="['/movie', movie.id]">
+          <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" />
+          <p>{{ movie.title }}</p>
+        </a>
+      </div>
+    </div>
+
+    <h2 class="section-title">Filmes de Animação</h2>
+    <div class="movie-scroll-horizontal">
+      <div *ngFor="let movie of aniMovies" class="movie-card">
+        <a [routerLink]="['/movie', movie.id]">
+          <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" />
+          <p>{{ movie.title }}</p>
+        </a>
+      </div>
+    </div>
+
+    <h2 class="section-title">Filmes de Aventura</h2>
+    <div class="movie-scroll-horizontal">
+      <div *ngFor="let movie of avenMovies" class="movie-card">
         <a [routerLink]="['/movie', movie.id]">
           <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" />
           <p>{{ movie.title }}</p>

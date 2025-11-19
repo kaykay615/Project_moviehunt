@@ -1,7 +1,5 @@
 .home-page {
   --background: #000;
-  display: flex;
-  flex-direction: column;
 
   .search-container {
     padding: 10px 16px;
@@ -30,27 +28,27 @@
     font-size: 1.6rem;
   }
 
-  /* Scroll horizontal para filmes de ação */
   .movie-scroll-horizontal {
     display: flex;
     gap: 12px;
     overflow-x: auto;
+    overflow-y: hidden;
     padding-left: 16px;
-    padding-bottom: 8px;
-    -webkit-overflow-scrolling: touch; /* rolagem suave iOS */
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
   }
 
   .movie-scroll-horizontal::-webkit-scrollbar {
-  display: none; /* Chrome, Safari e Edge */
+  display: none;
 }
 
   .movie-card {
-    min-width: 120px; /* largura fixa do card */
-    flex: 0 0 auto;   /* impede o card de encolher */
+    min-width: 120px;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 120px;        /* largura fixa de todos os cartazes */
+    width: 120px;
     height: 250px;
 
     img {
@@ -98,6 +96,7 @@ ion-tab-button.tab-selected {
 .genre-buttons {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
   padding: 0 16px;
   margin-bottom: 20px;
   margin-top: 10px;
@@ -192,5 +191,10 @@ ion-tab-button.tab-selected {
 .pagination span {
   color: #fff;
   font-size: 0.9rem;
+}
+
+a {
+  text-decoration: none !important;
+  color: inherit !important;
 }
 
