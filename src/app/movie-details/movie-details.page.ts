@@ -21,6 +21,9 @@ import {
   IonTabButton,
 } from '@ionic/angular/standalone';
 import { TmdbService } from '../services/tmdb.service';
+import { Capacitor } from '@capacitor/core';
+import { Geolocation } from '@capacitor/geolocation';
+
 
 @Component({
   selector: 'app-movie-details',
@@ -87,25 +90,54 @@ export class MovieDetailsPage implements OnInit {
 
 cinemas: any[] = [];
 
-pegarLocalizacao() {
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
+async pegarLocalizacao() {
+  try {
+    let lat: number;
+    let lng: number;
 
-      this.placesService.getNearbyCinemas(lat, lng)
-        .subscribe((res: any) => {
-          const top3 = res.results.slice(0, 3);
-          this.cinemas = top3;
+    // ✔ 1. Solicitar permissão ANTES de pegar a localização
+    if (Capacitor.isNativePlatform()) {
+      const perm = await Geolocation.requestPermissions();
 
-          console.log("Top 3 cinemas:", this.cinemas);
-        });
-    },
-    (err) => {
-      console.error('Erro ao pegar localização:', err);
+      // Se o usuário negar, para aqui
+      if (perm.location !== 'granted') {
+        console.warn('Permissão de localização negada');
+        return;
+      }
     }
-  );
+
+    // 📱 ✔ 2. Obter localização no APP
+    if (Capacitor.isNativePlatform()) {
+      const pos = await Geolocation.getCurrentPosition();
+      lat = pos.coords.latitude;
+      lng = pos.coords.longitude;
+
+    } else {
+      // 💻 ✔ 3. Obter localização no NAVEGADOR
+      await new Promise<void>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            lat = pos.coords.latitude;
+            lng = pos.coords.longitude;
+            resolve();
+          },
+          (err) => reject(err)
+        );
+      });
+    }
+
+    // 🔍 ✔ 4. Buscar cinemas no proxy Render
+    this.placesService.getNearbyCinemas(lat!, lng!)
+      .subscribe((res: any) => {
+        this.cinemas = res.results.slice(0, 3);
+      });
+
+  } catch (error) {
+    console.error('Erro ao pegar localização:', error);
+  }
 }
+
+
 
 abrirNoGoogleMaps(cinema: any) {
   const lat = cinema.geometry.location.lat;
