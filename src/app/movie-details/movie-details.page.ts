@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PlacesService } from '../services/places';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import {
   IonHeader,
   IonToolbar,
@@ -16,14 +14,14 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
-  IonTabs, 
-  IonTabBar, 
+  IonTabs,
+  IonTabBar,
   IonTabButton,
 } from '@ionic/angular/standalone';
-import { TmdbService } from '../services/tmdb.service';
-import { Capacitor } from '@capacitor/core';
-import { Geolocation } from '@capacitor/geolocation';
 
+import { TmdbService } from '../services/tmdb.service';
+import { PlacesService } from '../services/places';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-movie-details',
@@ -44,20 +42,27 @@ import { Geolocation } from '@capacitor/geolocation';
     IonButton,
     IonIcon,
     IonItem,
-    IonLabel, 
-    IonTabs, 
-    IonTabBar, 
+    IonLabel,
+    IonTabs,
+    IonTabBar,
     IonTabButton,
   ],
 })
 export class MovieDetailsPage implements OnInit {
+
   movie: any = null;
   stars: number[] = [];
+  cinemas: any[] = [];
 
-  constructor(private route: ActivatedRoute, private tmdb: TmdbService, private placesService: PlacesService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private tmdb: TmdbService,
+    private places: PlacesService
+  ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+
     if (id) {
       this.tmdb.getMovieDetails(id).subscribe((res: any) => {
         this.movie = res;
@@ -65,9 +70,72 @@ export class MovieDetailsPage implements OnInit {
         this.stars = Array.from({ length: starCount });
       });
     }
-    this.pegarLocalizacao();
+
+    // Agora pede permissão antes de buscar cinemas
+    await this.pedirPermissaoLocalizacao();
   }
 
+  // ---------------------------
+  // PEDIR PERMISSÃO DE LOCALIZAÇÃO
+  // ---------------------------
+  async pedirPermissaoLocalizacao() {
+    try {
+      console.log("🟡 Solicitando permissão de localização...");
+
+      const perm = await Geolocation.requestPermissions();
+
+      console.log("🔵 Permissão retornada:", perm);
+
+      if (perm.location === "granted") {
+        console.log("🟢 Permissão concedida. Buscando cinemas...");
+        this.carregarCinemas();
+      } else {
+        console.warn("🔴 Permissão negada pelo usuário.");
+      }
+
+    } catch (e) {
+      console.error("❌ Erro ao pedir permissão:", e);
+    }
+  }
+
+  // ---------------------------
+  // PEGAR LOCALIZAÇÃO + CINEMAS
+  // ---------------------------
+  async carregarCinemas() {
+    try {
+      console.log("🔵 Pegando posição atual...");
+
+      const pos = await Geolocation.getCurrentPosition();
+
+      console.log("📍 Localização recebida:", pos);
+
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      this.places.buscarCinemas(lat, lng).subscribe((resp: any) => {
+        console.log("🎬 Cinemas encontrados:", resp);
+        this.cinemas = resp?.places || [];
+      });
+
+    } catch (e) {
+      console.error("❌ Erro ao buscar cinemas:", e);
+    }
+  }
+
+  // ---------------------------
+  // ABRIR NO GOOGLE MAPS
+  // ---------------------------
+  abrirNoGoogleMaps(cinema: any) {
+    const lat = cinema.location.latitude;
+    const lng = cinema.location.longitude;
+
+    const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    window.open(url, '_blank');
+  }
+
+  // ---------------------------
+  // FUNÇÕES DO MOVIE
+  // ---------------------------
   getYear() {
     return this.movie?.release_date ? this.movie.release_date.split('-')[0] : '';
   }
@@ -87,65 +155,4 @@ export class MovieDetailsPage implements OnInit {
   getRuntime() {
     return this.movie?.runtime ? `${this.movie.runtime} min` : '';
   }
-
-cinemas: any[] = [];
-
-async pegarLocalizacao() {
-  try {
-    let lat: number;
-    let lng: number;
-
-    // ✔ 1. Solicitar permissão ANTES de pegar a localização
-    if (Capacitor.isNativePlatform()) {
-      const perm = await Geolocation.requestPermissions();
-
-      // Se o usuário negar, para aqui
-      if (perm.location !== 'granted') {
-        console.warn('Permissão de localização negada');
-        return;
-      }
-    }
-
-    // 📱 ✔ 2. Obter localização no APP
-    if (Capacitor.isNativePlatform()) {
-      const pos = await Geolocation.getCurrentPosition();
-      lat = pos.coords.latitude;
-      lng = pos.coords.longitude;
-
-    } else {
-      // 💻 ✔ 3. Obter localização no NAVEGADOR
-      await new Promise<void>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            lat = pos.coords.latitude;
-            lng = pos.coords.longitude;
-            resolve();
-          },
-          (err) => reject(err)
-        );
-      });
-    }
-
-    // 🔍 ✔ 4. Buscar cinemas no proxy Render
-    this.placesService.getNearbyCinemas(lat!, lng!)
-      .subscribe((res: any) => {
-        this.cinemas = res.results.slice(0, 3);
-      });
-
-  } catch (error) {
-    console.error('Erro ao pegar localização:', error);
-  }
 }
-
-
-
-abrirNoGoogleMaps(cinema: any) {
-  const lat = cinema.geometry.location.lat;
-  const lng = cinema.geometry.location.lng;
-
-  const url = `https://www.google.com/maps?q=${lat},${lng}`;
-
-  window.open(url, "_blank");
-}
-}
-
