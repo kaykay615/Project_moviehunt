@@ -46,6 +46,12 @@ export class TmdbService {
     return this.http.get(`${this.baseUrl}/discover/movie?api_key=${this.apiKey}&with_genres=12&language=pt-BR`);
   }
 
+  getNowPlayingMovies(): Observable<any> {
+  return this.http.get(
+    `${this.baseUrl}/movie/now_playing?api_key=${this.apiKey}&language=pt-BR&region=BR`
+  );
+  }
+
   // Buscar detalhes do filme
   getMovieDetails(movieId: number): Observable<any> {
     return this.http.get(
