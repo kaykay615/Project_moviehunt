@@ -52,7 +52,7 @@
   <h2>Cinemas Próximos</h2>
 
   <ion-item *ngFor="let cinema of cinemas">
-    <ion-label>{{ cinema.name }}</ion-label>
+    <ion-label>{{ cinema.displayName.text }}</ion-label>
 
     <ion-button slot="end" (click)="abrirNoGoogleMaps(cinema)">
       Ver no Maps
@@ -77,3 +77,4 @@
     <ion-label>Perfil</ion-label>
   </ion-tab-button>
 </ion-tab-bar>
+
