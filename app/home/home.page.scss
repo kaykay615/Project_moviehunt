@@ -1,0 +1,213 @@
+.home-page {
+  --background: #000;
+  opacity: 0;
+  animation: fadeIn var(--anim-medium) var(--anim-ease) both;
+
+  .search-container {
+    padding: 10px 16px;
+  }
+
+  .custom-searchbar {
+    --background: transparent;
+    --border-color: #7a1c1c;
+    --color: #fff;
+    --placeholder-color: #a23a3a;
+    --icon-color: #7a1c1c;
+    border: 1px solid #7a1c1c;
+    border-radius: 8px;
+  }
+
+  .placeholder {
+    color: #a23a3a;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .section-title {
+    color: #7a1c1c;
+    font-weight: bold;
+    margin: 16px 0 8px 16px;
+    font-size: 1.6rem;
+  }
+
+  .movie-scroll-horizontal {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-left: 16px;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .movie-scroll-horizontal::-webkit-scrollbar {
+  display: none;
+}
+
+  .movie-card {
+    min-width: 120px;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;
+    height: 250px;
+
+    img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      transition: transform var(--anim-medium) var(--anim-ease), opacity var(--anim-medium) var(--anim-ease);
+      will-change: transform, opacity;
+    }
+
+    p {
+      font-size: 0.85rem;
+      text-align: center;
+      color: #fff;
+    }
+  }
+}
+
+ion-title {
+  color: #7a1c1c;
+}
+
+ion-header {
+  --background: #000;
+}
+
+ion-toolbar{
+  background-color: black;
+}
+
+/* CSS simples para os tabs */
+ion-tab-bar {
+  --background: #7a1c1c !important;
+}
+
+ion-tab-button {
+  --color: black;
+  --color-selected: black;
+}
+
+ion-tab-button.tab-selected {
+  ion-icon, ion-label {
+    color: black !important;
+  }
+}
+
+/* ensure tab icons have a white box look (fine tuned in global.scss) */
+ion-tab-button ion-icon {
+  background: #fff;
+  padding: 6px;
+  border-radius: 8px;
+  color: #7a1c1c;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+.genre-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 0 16px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.genre-btn {
+  background: #b43838;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-weight: bold;
+  border: none;
+  color: white;
+}
+
+.search-results-container {
+  padding: 16px;
+}
+
+/* Lista vertical */
+.movie-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Item da lista */
+.movie-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: #111;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform var(--anim-medium) var(--anim-ease);
+}
+
+.movie-item:hover {
+  transform: scale(1.024);
+}
+
+/* Poster */
+.movie-item .poster {
+  width: 100px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Infos */
+.movie-item .info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.movie-item .info h3 {
+  color: #fff;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.movie-item .overview {
+  margin-top: 4px;
+  color: #ccc;
+  font-size: 0.8rem;
+  max-height: 3.2em;
+  overflow: hidden;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin: 20px 0;
+  color: #fff;
+}
+
+.pagination button {
+  background: #7a1c1c;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+}
+
+.pagination span {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+a {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+

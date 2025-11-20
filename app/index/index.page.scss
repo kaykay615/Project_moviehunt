@@ -1,0 +1,44 @@
+.welcome-page {
+  --background: #000;
+
+  .center-container {
+    margin-top: -10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    height: 100vh;
+    text-align: center;
+    color: #7a1c1c;
+    padding: 0 1rem;
+  }
+
+  .app-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 3rem;
+  }
+
+  .welcome-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+    color: #a23a3a;
+    margin-bottom: 2rem;
+  }
+
+  .continue-btn {
+    --background: #7a1c1c;
+    --background-activated: #5e1515;
+    --border-radius: 10px;
+    --color: #fff;
+    font-weight: 500;
+    height: 45px;
+    width: 80%;
+    max-width: 300px;
+  }
+}

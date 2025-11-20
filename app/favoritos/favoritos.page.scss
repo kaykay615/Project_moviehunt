@@ -1,0 +1,86 @@
+.favoritos-page {
+  --background: #000;
+  padding: 14px;
+}
+
+/* ensure header back icon sits inside white box */
+ion-back-button ion-icon {
+  background: #fff;
+  padding: 6px;
+  border-radius: 8px;
+  color: #7a1c1c;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 12px;
+}
+
+.empty-inner {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  text-align: left;
+  color: #a23a3a;
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: #fff;
+  background: #7a1c1c;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+.empty-text h3 {
+  margin: 0 0 6px 0;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.empty-text p {
+  margin: 0 0 8px 0;
+  color: #c9a6a6;
+  font-size: 0.95rem;
+}
+
+.empty-text ion-button {
+  --background: #fff;
+  --color: #7a1c1c;
+  padding: 0 12px;
+}
+
+.favorites-list {
+  display: grid;
+  gap: 12px;
+}
+
+.fav-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: linear-gradient(180deg, #0f0f0f 0%, #141414 100%);
+  border: 1px solid #7a1c1c;
+}
+
+.fav-poster img {
+  width: 92px;
+  height: 136px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.fav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rating {
+  color: #fff;
+  font-weight: 700;
+}
