@@ -36,10 +36,26 @@ export class GenrePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.genreId = Number(this.route.snapshot.paramMap.get('id'));
+  const param = this.route.snapshot.paramMap.get('id');
+  
+  if (param === 'now_playing') {
+    this.genreName = 'Filmes em Cinema';
+    this.loadLancaMovies(1);
+  } else {
+    this.genreId = Number(param);
     this.setGenreName();
     this.loadMovies(1);
   }
+}
+
+loadLancaMovies(page: number) {
+  this.tmdb.getNowPlayingMovies().subscribe((res: any) => {
+    this.movies = res.results;
+    this.totalPages = res.total_pages;
+    this.currentPage = page;
+  });
+}
+
 
   loadMovies(page: number) {
     this.tmdb.getMoviesByGenre(this.genreId, page).subscribe((res: any) => {
