@@ -6,8 +6,13 @@
 
 <ion-content class="movie-details" fullscreen>
   <div *ngIf="movie" class="details-card">
-    <ion-card>
-      <img [src]="'https://image.tmdb.org/t/p/w300' + movie.poster_path" alt="{{ movie.title }}" />
+    <ion-card class="card-hoverable">
+      <div class="poster-wrap">
+        <img class="poster-img img-smooth" [src]="'https://image.tmdb.org/t/p/w780' + movie.poster_path" alt="{{ movie.title }}" />
+        <ion-button fill="clear" class="favorite-btn" (click)="toggleFavorite()" [attr.aria-pressed]="isFavorite" [attr.aria-label]="isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'" [class.filled]="isFavorite" size="small">
+          <ion-icon slot="icon-only" [name]="isFavorite ? 'heart' : 'heart-outline'"></ion-icon>
+        </ion-button>
+      </div>
       <ion-card-header>
         <ion-card-title>{{ movie.title }} ({{ getYear() }})</ion-card-title>
       </ion-card-header>
@@ -40,7 +45,27 @@
           <ion-label>Avaliação</ion-label>
           <div class="stars">
             <ion-icon name="star" *ngFor="let s of stars"></ion-icon>
-            <span class="rating">{{ movie.vote_average }}/10</span>
+            <span class="rating">{{ getRating() }}/10</span>
+          </div>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Plataformas</ion-label>
+          <div class="platforms">
+            <ng-container *ngIf="hasAnyProvider(); else cinemasOnly">
+              <div class="platform-group" *ngFor="let g of providers">
+                <div class="group-title">{{ g.type }}:</div>
+                <div class="platform-list">
+                  <div class="provider" *ngFor="let p of g.providers">
+                    <img *ngIf="p.logo_path" [src]="'https://image.tmdb.org/t/p/w92' + p.logo_path" [alt]="p.provider_name" />
+                    <span class="provider-name">{{ p.provider_name }}</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #cinemasOnly>
+              <div class="only-cinemas">Apenas nos cinemas</div>
+            </ng-template>
           </div>
         </ion-item>
       </ion-card-content>
@@ -52,7 +77,7 @@
   <h2>Cinemas Próximos</h2>
 
   <ion-item *ngFor="let cinema of cinemas">
-    <ion-label>{{ cinema.displayName.text }}</ion-label>
+    <ion-label>{{ cinema.name }}</ion-label>
 
     <ion-button slot="end" (click)="abrirNoGoogleMaps(cinema)">
       Ver no Maps
@@ -77,4 +102,3 @@
     <ion-label>Perfil</ion-label>
   </ion-tab-button>
 </ion-tab-bar>
-

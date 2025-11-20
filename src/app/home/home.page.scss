@@ -1,5 +1,7 @@
 .home-page {
   --background: #000;
+  opacity: 0;
+  animation: fadeIn var(--anim-medium) var(--anim-ease) both;
 
   .search-container {
     padding: 10px 16px;
@@ -55,6 +57,8 @@
       width: 100%;
       border-radius: 8px;
       margin-bottom: 4px;
+      transition: transform var(--anim-medium) var(--anim-ease), opacity var(--anim-medium) var(--anim-ease);
+      will-change: transform, opacity;
     }
 
     p {
@@ -91,6 +95,15 @@ ion-tab-button.tab-selected {
   ion-icon, ion-label {
     color: black !important;
   }
+}
+
+/* ensure tab icons have a white box look (fine tuned in global.scss) */
+ion-tab-button ion-icon {
+  background: #fff;
+  padding: 6px;
+  border-radius: 8px;
+  color: #7a1c1c;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
 }
 
 .genre-buttons {
@@ -130,11 +143,11 @@ ion-tab-button.tab-selected {
   background: #111;
   border-radius: 10px;
   cursor: pointer;
-  transition: transform .2s ease;
+  transition: transform var(--anim-medium) var(--anim-ease);
 }
 
 .movie-item:hover {
-  transform: scale(1.02);
+  transform: scale(1.024);
 }
 
 /* Poster */

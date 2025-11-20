@@ -21,6 +21,10 @@ export const routes: Routes = [
     loadComponent: () => import('./perfil/perfil.page').then(m => m.PerfilPage),
   },
   {
+    path: 'favoritos',
+    loadComponent: () => import('./favoritos/favoritos.page').then(m => m.FavoritosPage),
+  },
+  {
     path: 'movie/:id',
     loadComponent: () => import('./movie-details/movie-details.page').then(m => m.MovieDetailsPage),
   },

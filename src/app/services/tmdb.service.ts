@@ -46,16 +46,11 @@ export class TmdbService {
     return this.http.get(`${this.baseUrl}/discover/movie?api_key=${this.apiKey}&with_genres=12&language=pt-BR`);
   }
 
-  getNowPlayingMovies(): Observable<any> {
-  return this.http.get(
-    `${this.baseUrl}/movie/now_playing?api_key=${this.apiKey}&language=pt-BR&region=BR`
-  );
-  }
-
-  // Buscar detalhes do filme
+  // Buscar detalhes do filme (inclui credits e providers quando possível)
   getMovieDetails(movieId: number): Observable<any> {
+    // append_to_response accepts nested endpoints like watch/providers
     return this.http.get(
-      `${this.baseUrl}/movie/${movieId}?api_key=${this.apiKey}&language=pt-BR&append_to_response=credits`
+      `${this.baseUrl}/movie/${movieId}?api_key=${this.apiKey}&language=pt-BR&append_to_response=credits,watch/providers`
     );
   }
 

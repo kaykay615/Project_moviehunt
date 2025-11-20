@@ -6,22 +6,14 @@ import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 
-// Ícones
 import { addIcons } from 'ionicons';
-import { home, search, person, bookmark, star } from 'ionicons/icons';
+import { home, search, person, bookmark } from 'ionicons/icons';
 
-// Registrar todos os ícones que seu app usa
-addIcons({
-  home,
-  search,
-  person,
-  bookmark,
-  star
-});
+addIcons({ home, search, person, bookmark });
 
 bootstrapApplication(AppComponent, {
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(),

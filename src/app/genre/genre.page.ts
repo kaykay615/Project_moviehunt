@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { TmdbService } from '../services/tmdb.service';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons,
-  IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel,
+  IonTabBar, IonTabButton, IonIcon, IonLabel,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -16,8 +16,8 @@ import {
   imports: [
     CommonModule,
     RouterModule,
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonBackButton, IonButtons, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel,
+  IonHeader, IonToolbar, IonTitle, IonContent,
+  IonBackButton, IonButtons, IonTabBar, IonTabButton, IonIcon, IonLabel,
   ]
 })
 export class GenrePage implements OnInit {
@@ -36,26 +36,10 @@ export class GenrePage implements OnInit {
   ) {}
 
   ngOnInit() {
-  const param = this.route.snapshot.paramMap.get('id');
-  
-  if (param === 'now_playing') {
-    this.genreName = 'Filmes em Cinema';
-    this.loadLancaMovies(1);
-  } else {
-    this.genreId = Number(param);
+    this.genreId = Number(this.route.snapshot.paramMap.get('id'));
     this.setGenreName();
     this.loadMovies(1);
   }
-}
-
-loadLancaMovies(page: number) {
-  this.tmdb.getNowPlayingMovies().subscribe((res: any) => {
-    this.movies = res.results;
-    this.totalPages = res.total_pages;
-    this.currentPage = page;
-  });
-}
-
 
   loadMovies(page: number) {
     this.tmdb.getMoviesByGenre(this.genreId, page).subscribe((res: any) => {

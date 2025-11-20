@@ -6,7 +6,6 @@ import {
   IonTitle, 
   IonContent, 
   IonSearchbar,
-  IonTabs,
   IonTabBar,
   IonTabButton,
   IonIcon,
@@ -27,7 +26,6 @@ import { TmdbService } from '../services/tmdb.service';
     IonTitle, 
     IonContent, 
     IonSearchbar,
-    IonTabs,
     IonTabBar,
     IonTabButton,
     IonIcon,
@@ -45,7 +43,6 @@ export class HomePage implements OnInit {
   dramaMovies: any[] = []; 
   aniMovies: any[] = [];
   avenMovies: any[] = [];
-  lancaMovies: any[] = [];
 
   // Controle da busca
   searchActive = false;
@@ -93,10 +90,6 @@ export class HomePage implements OnInit {
 
     this.tmdb.getAvenMovies().subscribe((res: any) => {
       this.avenMovies = res.results.slice(0, 20);
-    });
-
-    this.tmdb.getNowPlayingMovies().subscribe((res: any) => {
-      this.lancaMovies = res.results.slice(0, 20);
     });
   }
 

@@ -50,17 +50,6 @@
       <button class="genre-btn" [routerLink]="['/genre', 18]">Drama</button>
       <button class="genre-btn" [routerLink]="['/genre', 16]">Animação</button>
       <button class="genre-btn" [routerLink]="['/genre', 12]">Aventura</button>
-      <button class="genre-btn" [routerLink]="['/genre', 'now_playing']">Lançamentos</button>
-    </div>
-
-    <h2 class="section-title">Filmes em Lançamento</h2>
-    <div class="movie-scroll-horizontal">
-      <div *ngFor="let movie of lancaMovies" class="movie-card">
-        <a [routerLink]="['/movie', movie.id]">
-          <img [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path" />
-          <p>{{ movie.title }}</p>
-        </a>
-      </div>
     </div>
 
     <h2 class="section-title">Filmes de Ação</h2>

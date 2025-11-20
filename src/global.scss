@@ -40,4 +40,77 @@ ion-content {
   --padding-top: env(safe-area-inset-top);
 }
 
+/* Global animation tokens */
+:root {
+  --anim-fast: 180ms;
+  --anim-medium: 320ms;
+  --anim-smooth: 420ms;
+  --anim-ease: cubic-bezier(.2,.8,.2,1);
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes subtleRise {
+  from { opacity: 0; transform: translateY(8px) scale(.995); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(6px) scale(.992); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Reusable utility classes */
+.fade-in { animation: fadeIn var(--anim-medium) var(--anim-ease) both; }
+.rise { animation: subtleRise var(--anim-smooth) var(--anim-ease) both; }
+.card-enter { animation: cardEnter var(--anim-smooth) var(--anim-ease) both; }
+
+/* Global transitions for interactive elements */
+button, ion-button, a, input, ion-input, ion-item {
+  transition: all var(--anim-fast) var(--anim-ease);
+}
+
+/* Slight hover lift for cards */
+.card-hoverable {
+  transition: transform var(--anim-medium) var(--anim-ease), box-shadow var(--anim-medium) var(--anim-ease);
+}
+.card-hoverable:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.6);
+}
+
+/* Image smoothness */
+.img-smooth { transition: opacity var(--anim-medium) var(--anim-ease), transform var(--anim-medium) var(--anim-ease); }
+
+/* Icon box utility - white square around icons */
+.icon-box,
+ion-tab-button ion-icon,
+ion-back-button ion-icon,
+ion-toolbar ion-buttons ion-button ion-icon,
+ion-toolbar ion-buttons ion-button {
+  background: #fff;
+  padding: 6px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* ensure icon color contrasts on white box */
+ion-tab-button ion-icon, ion-back-button ion-icon, ion-toolbar ion-buttons ion-button ion-icon {
+  color: #7a1c1c; /* red accent */
+  font-size: 18px;
+}
+
+
 
