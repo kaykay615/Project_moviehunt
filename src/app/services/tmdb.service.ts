@@ -54,6 +54,14 @@ export class TmdbService {
     );
   }
 
+  // Filmes que estão em cartaz / agora no cinema
+  getNowPlayingMovies(): Observable<any> {
+  return this.http.get(
+    `${this.baseUrl}/movie/now_playing?api_key=${this.apiKey}&language=pt-BR&region=BR`
+  );
+  } 
+
+
   getMoviesByQuery(query: string, page: number = 1) {
   return this.http.get(
     `${this.baseUrl}/search/movie?query=${query}&page=${page}&api_key=${this.apiKey}&language=pt-BR`

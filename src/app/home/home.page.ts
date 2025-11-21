@@ -43,6 +43,8 @@ export class HomePage implements OnInit {
   dramaMovies: any[] = []; 
   aniMovies: any[] = [];
   avenMovies: any[] = [];
+  nowPlayingMovies: any[] = [];
+
 
   // Controle da busca
   searchActive = false;
@@ -91,6 +93,12 @@ export class HomePage implements OnInit {
     this.tmdb.getAvenMovies().subscribe((res: any) => {
       this.avenMovies = res.results.slice(0, 20);
     });
+
+    this.tmdb.getNowPlayingMovies().subscribe((res: any) => {
+    this.nowPlayingMovies = res.results.slice(0, 20);
+    });
+
+
   }
 
   onSearch(event: any) {

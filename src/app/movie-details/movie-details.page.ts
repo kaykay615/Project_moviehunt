@@ -20,6 +20,7 @@ import {
   IonTabButton,
 } from '@ionic/angular/standalone';
 import { TmdbService } from '../services/tmdb.service';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-movie-details',
@@ -51,21 +52,72 @@ export class MovieDetailsPage implements OnInit {
   providers: { type: string; providers: any[] }[] = [];
   isFavorite = false;
 
-  constructor(private route: ActivatedRoute, private tmdb: TmdbService, private placesService: PlacesService) {}
+  constructor(private route: ActivatedRoute, private tmdb: TmdbService, private places: PlacesService) {}
 
-  ngOnInit() {
+async ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+
     if (id) {
       this.tmdb.getMovieDetails(id).subscribe((res: any) => {
         this.movie = res;
         const starCount = Math.round((this.movie.vote_average || 0) / 2);
         this.stars = Array.from({ length: starCount });
-        this.extractProviders();
-          this.loadFavoriteState();
       });
     }
-    this.pegarLocalizacao();
+
+    // Agora pede permissão antes de buscar cinemas
+    await this.pedirPermissaoLocalizacao();
   }
+
+  async pedirPermissaoLocalizacao() {
+    try {
+      console.log("🟡 Solicitando permissão de localização...");
+
+      const perm = await Geolocation.requestPermissions();
+
+      console.log("🔵 Permissão retornada:", perm);
+
+      if (perm.location === "granted") {
+        console.log("🟢 Permissão concedida. Buscando cinemas...");
+        this.carregarCinemas();
+      } else {
+        console.warn("🔴 Permissão negada pelo usuário.");
+      }
+
+    } catch (e) {
+      console.error("❌ Erro ao pedir permissão:", e);
+    }
+  }
+
+    async carregarCinemas() {
+    try {
+      console.log("🔵 Pegando posição atual...");
+
+      const pos = await Geolocation.getCurrentPosition();
+
+      console.log("📍 Localização recebida:", pos);
+
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      this.places.buscarCinemas(lat, lng).subscribe((resp: any) => {
+        console.log("🎬 Cinemas encontrados:", resp);
+        this.cinemas = resp?.places || [];
+      });
+
+    } catch (e) {
+      console.error("❌ Erro ao buscar cinemas:", e);
+    }
+  }
+
+  abrirNoGoogleMaps(cinema: any) {
+    const lat = cinema.location.latitude;
+    const lng = cinema.location.longitude;
+
+    const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    window.open(url, '_blank');
+  }
+
 
   getRating(): string {
     if (!this.movie || this.movie.vote_average == null) return '0.0';
@@ -182,33 +234,6 @@ export class MovieDetailsPage implements OnInit {
 
 cinemas: any[] = [];
 
-pegarLocalizacao() {
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
 
-      this.placesService.getNearbyCinemas(lat, lng)
-        .subscribe((res: any) => {
-          const top3 = res.results.slice(0, 3);
-          this.cinemas = top3;
-
-          console.log("Top 3 cinemas:", this.cinemas);
-        });
-    },
-    (err) => {
-      console.error('Erro ao pegar localização:', err);
-    }
-  );
-}
-
-abrirNoGoogleMaps(cinema: any) {
-  const lat = cinema.geometry.location.lat;
-  const lng = cinema.geometry.location.lng;
-
-  const url = `https://www.google.com/maps?q=${lat},${lng}`;
-
-  window.open(url, "_blank");
-}
 }
 
