@@ -7,9 +7,9 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 
 import { addIcons } from 'ionicons';
-import { home, search, person, bookmark } from 'ionicons/icons';
+import { home, search, person, bookmark, informationCircle, informationCircleOutline } from 'ionicons/icons';
 
-addIcons({ home, search, person, bookmark });
+addIcons({ home, search, person, bookmark,  informationCircle, informationCircleOutline });
 
 bootstrapApplication(AppComponent, {
   providers: [

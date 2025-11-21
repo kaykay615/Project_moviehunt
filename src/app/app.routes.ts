@@ -31,6 +31,10 @@ export const routes: Routes = [
   {
   path: 'genre/:id',
   loadComponent: () => import('./genre/genre.page').then(m => m.GenrePage)
+  },  {
+    path: 'sobre',
+    loadComponent: () => import('./sobre/sobre.page').then( m => m.SobrePage)
   },
+
 
 ];

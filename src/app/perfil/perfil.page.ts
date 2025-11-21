@@ -2,23 +2,20 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonButton,
-  IonButtons,
-  IonBackButton,
+  IonHeader, IonToolbar, IonTitle, IonContent,
+  IonItem, IonLabel, IonInput, IonButton,
+  IonButtons, IonBackButton, IonTabBar, IonTabButton, IonIcon
 } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+
+import { RouterModule } from '@angular/router';
+
+import { AuthService } from '../services/auth.service';
+import { FirestoreService } from '../services/firestore.service';
 
 @Component({
   selector: 'app-perfil',
-  templateUrl: 'perfil.page.html',
-  styleUrls: ['perfil.page.scss'],
+  templateUrl: './perfil.page.html',
+  styleUrls: ['./perfil.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -33,34 +30,40 @@ import { Router } from '@angular/router';
     IonButton,
     IonButtons,
     IonBackButton,
+    IonTabBar,
+    IonTabButton,
+    IonIcon,
+    RouterModule
   ],
 })
 export class PerfilPage {
+
+  showRegister = false;
+
+  errorMessage = '';
+  userData: any = null;
+
+  // LOGIN
   email = '';
   password = '';
-  // register fields
-  showRegister = false;
-  nome = '';
-  cpf = '';
-  anoNascimento: number | null = null;
+
+  // REGISTRO
+  regName = '';       // <-- NOVO
   regEmail = '';
   regPassword = '';
   regConfirmPassword = '';
-  errorMessage = '';
 
-  constructor(private router: Router) {}
+  constructor(private auth: AuthService, private fs: FirestoreService) {
 
-  login() {
-    // Aqui você pode integrar com um serviço de autenticação.
-    console.log('Tentativa de login', { email: this.email, password: this.password });
-    // validação básica
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Preencha e-mail e senha.';
-      return;
-    }
-    this.errorMessage = '';
-    // Para exemplo, redireciona para a página inicial após "login".
-    this.router.navigate(['/index']);
+    // Quando usuário muda (login/logout), buscamos os dados no Firestore
+    this.auth.user$.subscribe(async user => {
+      if (user) {
+        const dados = await this.fs.getUserData(user.uid);
+        this.userData = { uid: user.uid, email: user.email, ...dados };
+      } else {
+        this.userData = null;
+      }
+    });
   }
 
   toggleMode(register: boolean) {
@@ -68,10 +71,23 @@ export class PerfilPage {
     this.errorMessage = '';
   }
 
-  createAccount() {
-    // validações simples
-    if (!this.nome || !this.cpf || !this.anoNascimento || !this.regEmail || !this.regPassword || !this.regConfirmPassword) {
-      this.errorMessage = 'Preencha todos os campos.';
+  login() {
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Preencha e-mail e senha.';
+      return;
+    }
+
+    this.auth.login(this.email, this.password)
+      .then(() => this.errorMessage = '')
+      .catch(err => {
+        console.log("ERRO FIREBASE LOGIN:", err);
+        this.errorMessage = this.getError(err);
+      });
+  }
+
+  async createAccount() {
+    if (!this.regName.trim()) {
+      this.errorMessage = 'Digite seu nome.';
       return;
     }
 
@@ -80,23 +96,56 @@ export class PerfilPage {
       return;
     }
 
-    // validação básica do CPF (apenas tamanho) - você pode melhorar
-    const cpfDigits = this.cpf.replace(/\D/g, '');
-    if (cpfDigits.length < 11) {
-      this.errorMessage = 'CPF inválido.';
-      return;
+    try {
+      const cred = await this.auth.register(this.regEmail, this.regPassword);
+
+      // Salvar dados no Firestore
+      await this.fs.createUserData(cred.user.uid, {
+        nome: this.regName,
+        email: this.regEmail,
+        criadoEm: new Date()
+      });
+
+      this.errorMessage = '';
+
+    } catch (err: any) {
+      console.log("ERRO FIREBASE REGISTER:", err);
+      this.errorMessage = this.getError(err);
     }
+  }
 
-    // Simula criação de conta (substituir por chamada ao backend)
-    console.log('Criando conta', {
-      nome: this.nome,
-      cpf: this.cpf,
-      anoNascimento: this.anoNascimento,
-      email: this.regEmail,
-    });
+  logout() {
+    this.auth.logout();
+  }
 
-    this.errorMessage = '';
-    // após criar, redireciona para index (ou fazer login automático)
-    this.router.navigate(['/index']);
+  // Tradução de erros do Firebase
+  getError(err: any): string {
+    const code = err?.code || '';
+
+    switch (code) {
+      case 'auth/invalid-email':
+        return 'E-mail inválido.';
+
+      case 'auth/email-already-in-use':
+        return 'E-mail já está cadastrado.';
+
+      case 'auth/weak-password':
+        return 'A senha deve ter pelo menos 6 caracteres.';
+
+      case 'auth/missing-password':
+        return 'Digite uma senha.';
+
+      case 'auth/missing-email':
+        return 'Digite um e-mail.';
+
+      case 'auth/user-not-found':
+        return 'Usuário não encontrado.';
+
+      case 'auth/wrong-password':
+        return 'Senha incorreta.';
+
+      default:
+        return 'Erro inesperado (' + code + ')';
+    }
   }
 }

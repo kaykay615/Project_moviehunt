@@ -7,13 +7,22 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 
 import { addIcons } from 'ionicons';
-import { home, search, person, bookmark } from 'ionicons/icons';
+import { home, search, person, bookmark, informationCircleOutline } from 'ionicons/icons';
 
-addIcons({ home, search, person, bookmark });
+// 🔥 Importa o environment
+import { environment } from './environments/environment';
+
+// 🔥 Firebase
+import { initializeApp } from 'firebase/app';
+
+// Inicializa Firebase com o environment
+initializeApp(environment.firebaseConfig);
+
+addIcons({ home, search, person, bookmark, informationCircleOutline });
 
 bootstrapApplication(AppComponent, {
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(),

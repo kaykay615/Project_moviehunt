@@ -16,9 +16,10 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
-  IonTabBar, 
+  IonTabBar,
   IonTabButton,
 } from '@ionic/angular/standalone';
+
 import { TmdbService } from '../services/tmdb.service';
 import { Geolocation } from '@capacitor/geolocation';
 
@@ -41,8 +42,8 @@ import { Geolocation } from '@capacitor/geolocation';
     IonButton,
     IonIcon,
     IonItem,
-    IonLabel, 
-    IonTabBar, 
+    IonLabel,
+    IonTabBar,
     IonTabButton,
   ],
 })
@@ -51,21 +52,35 @@ export class MovieDetailsPage implements OnInit {
   stars: number[] = [];
   providers: { type: string; providers: any[] }[] = [];
   isFavorite = false;
+  cinemas: any[] = [];
 
-  constructor(private route: ActivatedRoute, private tmdb: TmdbService, private places: PlacesService) {}
+  private favoritesKey = 'moviehunt_favorites';
 
-async ngOnInit() {
+  constructor(
+    private route: ActivatedRoute,
+    private tmdb: TmdbService,
+    private places: PlacesService
+  ) {}
+
+  async ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
     if (id) {
       this.tmdb.getMovieDetails(id).subscribe((res: any) => {
         this.movie = res;
+
         const starCount = Math.round((this.movie.vote_average || 0) / 2);
         this.stars = Array.from({ length: starCount });
+
+        // CORREÇÃO: providers agora são carregados depois do filme
+        this.extractProviders();
+
+        // CORREÇÃO: favoritos só podem ser carregados depois do filme
+        this.loadFavoriteState();
       });
     }
 
-    // Agora pede permissão antes de buscar cinemas
+    // Permissão de localização para buscar cinemas
     await this.pedirPermissaoLocalizacao();
   }
 
@@ -74,14 +89,13 @@ async ngOnInit() {
       console.log("🟡 Solicitando permissão de localização...");
 
       const perm = await Geolocation.requestPermissions();
-
       console.log("🔵 Permissão retornada:", perm);
 
       if (perm.location === "granted") {
         console.log("🟢 Permissão concedida. Buscando cinemas...");
         this.carregarCinemas();
       } else {
-        console.warn("🔴 Permissão negada pelo usuário.");
+        console.warn("🔴 Permissão negada.");
       }
 
     } catch (e) {
@@ -89,13 +103,12 @@ async ngOnInit() {
     }
   }
 
-    async carregarCinemas() {
+  async carregarCinemas() {
     try {
-      console.log("🔵 Pegando posição atual...");
+      console.log("🔵 Pegando localização atual...");
 
       const pos = await Geolocation.getCurrentPosition();
-
-      console.log("📍 Localização recebida:", pos);
+      console.log("📍 Localização:", pos);
 
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
@@ -113,59 +126,58 @@ async ngOnInit() {
   abrirNoGoogleMaps(cinema: any) {
     const lat = cinema.location.latitude;
     const lng = cinema.location.longitude;
-
     const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
     window.open(url, '_blank');
   }
 
-
   getRating(): string {
     if (!this.movie || this.movie.vote_average == null) return '0.0';
-    // format to one decimal place, e.g. 7.7
     return Number(this.movie.vote_average).toFixed(1);
   }
 
+  // ================================
+  // EXTRAIR PROVIDERS (CORRIGIDO)
+  // ================================
   private extractProviders() {
-    this.providers = [];
-    if (!this.movie) return;
+  this.providers = [];
+  if (!this.movie) return;
 
-    // TMDB returns providers in movie['watch/providers'].results with country codes
-    const results = this.movie['watch/providers']?.results || {};
+  const results = this.movie['watch/providers']?.results || {};
 
-    // Prefer BR entry, then US, then first available
-    const preferredCountries = ['BR', 'US'];
-    let countryEntry: any = null;
-    for (const c of preferredCountries) {
-      if (results[c]) {
-        countryEntry = results[c];
-        break;
-      }
+  const preferred = ['BR', 'US'];
+  let entry: any = null;
+
+  for (const c of preferred) {
+    if (results[c]) {
+      entry = results[c];
+      break;
     }
-    if (!countryEntry) {
-      const keys = Object.keys(results);
-      if (keys.length) countryEntry = results[keys[0]];
-    }
-
-    if (!countryEntry) return;
-
-    const mapAndPush = (type: string, list: any[]) => {
-      if (!list || !Array.isArray(list) || list.length === 0) return;
-      const items = list.map(p => ({ provider_name: p.provider_name, logo_path: p.logo_path }));
-      this.providers.push({ type, providers: items });
-    };
-
-    // types: flatrate (streaming), rent, buy
-    mapAndPush('Streaming', countryEntry.flatrate || countryEntry['flatrate']);
-    mapAndPush('Aluguel', countryEntry.rent || countryEntry['rent']);
-    mapAndPush('Compra', countryEntry.buy || countryEntry['buy']);
   }
+
+  if (!entry) {
+    const keys = Object.keys(results);
+    if (keys.length) entry = results[keys[0]];
+  }
+
+  if (!entry) return;
+
+  // <-- SOMENTE STREAMING
+  if (entry.flatrate && entry.flatrate.length > 0) {
+    this.providers.push({
+      type: 'Streaming',
+      providers: entry.flatrate.map((p: any) => ({
+        provider_name: p.provider_name,
+        logo_path: p.logo_path,
+      }))
+    });
+  }
+}
 
   hasAnyProvider(): boolean {
     return this.providers && this.providers.length > 0;
   }
 
-  private favoritesKey = 'moviehunt_favorites';
-
+  // FAVORITOS ==========================
   private loadFavoriteState() {
     const list = this.getFavoritesList();
     this.isFavorite = !!list.find((m: any) => m.id === this.movie?.id);
@@ -174,21 +186,23 @@ async ngOnInit() {
   toggleFavorite() {
     if (!this.movie) return;
     const list = this.getFavoritesList();
+
     const exists = list.find((m: any) => m.id === this.movie.id);
+
     if (exists) {
       const newList = list.filter((m: any) => m.id !== this.movie.id);
       this.saveFavoritesList(newList);
       this.isFavorite = false;
     } else {
-      // store minimal movie info
-      const toSave = {
+      const data = {
         id: this.movie.id,
         title: this.movie.title,
         poster_path: this.movie.poster_path,
         vote_average: this.movie.vote_average,
         release_date: this.movie.release_date
       };
-      list.unshift(toSave);
+
+      list.unshift(data);
       this.saveFavoritesList(list);
       this.isFavorite = true;
     }
@@ -197,23 +211,19 @@ async ngOnInit() {
   private getFavoritesList(): any[] {
     try {
       const raw = localStorage.getItem(this.favoritesKey);
-      if (!raw) return [];
-      return JSON.parse(raw) || [];
-    } catch (e) {
+      return raw ? JSON.parse(raw) : [];
+    } catch {
       return [];
     }
   }
 
   private saveFavoritesList(list: any[]) {
-    try {
-      localStorage.setItem(this.favoritesKey, JSON.stringify(list));
-    } catch (e) {
-      console.error('Failed to save favorites', e);
-    }
+    localStorage.setItem(this.favoritesKey, JSON.stringify(list));
   }
 
+  // INFO DO FILME ======================
   getYear() {
-    return this.movie?.release_date ? this.movie.release_date.split('-')[0] : '';
+    return this.movie?.release_date?.split('-')[0] || '';
   }
 
   getDirector() {
@@ -231,9 +241,4 @@ async ngOnInit() {
   getRuntime() {
     return this.movie?.runtime ? `${this.movie.runtime} min` : '';
   }
-
-cinemas: any[] = [];
-
-
 }
-
