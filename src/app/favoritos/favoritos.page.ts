@@ -14,6 +14,9 @@ import {
   IonBackButton,
   IonButtons,
   IonIcon,
+  IonTabBar,
+  IonTabButton,
+  IonLabel,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -36,6 +39,9 @@ import {
     IonButton,
     IonBackButton,
     IonButtons,
+    IonTabBar,
+    IonTabButton,
+    IonLabel,
   ],
 })
 export class FavoritosPage implements OnInit {

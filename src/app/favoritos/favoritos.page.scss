@@ -68,7 +68,7 @@ ion-back-button ion-icon {
 }
 
 .fav-poster img {
-  width: 92px;
+  width: 300px;
   height: 136px;
   object-fit: cover;
   border-radius: 8px;
@@ -83,4 +83,27 @@ ion-back-button ion-icon {
 .rating {
   color: #fff;
   font-weight: 700;
+}
+
+ion-header{
+  color: #7a1c1c;
+}
+
+ion-card-title{
+  font-size: 15px;
+}
+
+ion-tab-bar {
+  --background: #7a1c1c !important;
+}
+
+ion-tab-button {
+  --color: black;
+  --color-selected: black;
+}
+
+ion-tab-button.tab-selected {
+  ion-icon, ion-label {
+    color: black !important;
+  }
 }

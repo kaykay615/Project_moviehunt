@@ -204,3 +204,27 @@ ion-tab-button.tab-selected {
   --background: #7a1c1c;
   color: white;
 }
+
+ion-header {
+  background-color: #000;
+  color: #7a1c1c;
+}
+
+
+.sinopse-bloco {
+  margin-bottom: 16px;
+  padding: 10px 4px;
+}
+
+.sinopse-titulo {
+  color: #a23a3a;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.sinopse-texto {
+  color: #ddd;
+  line-height: 1.4;
+  font-size: 0.95rem;
+}

@@ -32,7 +32,7 @@
             left: 20px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
+            color: #7a1c1c;
             padding: 10px 20px;
             border-radius: 30px;
             cursor: pointer;
@@ -283,28 +283,37 @@
         }
 
         @media (max-width: 768px) {
-            .members-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .member-card {
-                width: 90%;
-                max-width: 350px;
-            }
-            
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .back-button {
-                position: relative;
-                top: 0;
-                left: 0;
-                margin-bottom: 20px;
-                align-self: flex-start;
-            }
-        }
+    /* Garantir que o body/HTML permita scroll */
+    html, body {
+        overflow-x: hidden;
+        overflow-y: auto; /* Permite rolagem vertical */
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .members-container {
+        flex-direction: column;
+        align-items: center;
+        overflow: visible; /* Garantir que não corte o conteúdo */
+    }
+    
+    .member-card {
+        width: 90%;
+        max-width: 350px;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    .back-button {
+        position: relative;
+        top: 0;
+        left: 0;
+        margin-bottom: 20px;
+        align-self: flex-start;
+    }
+}
     </style>
 </head>
 <body>

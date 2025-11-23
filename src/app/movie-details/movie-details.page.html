@@ -17,6 +17,10 @@
         <ion-card-title>{{ movie.title }} ({{ getYear() }})</ion-card-title>
       </ion-card-header>
       <ion-card-content>
+        <div class="sinopse-bloco" *ngIf="movie?.overview">
+        <h3 class="sinopse-titulo">Sinopse</h3>
+        <p class="sinopse-texto">{{ movie.overview }}</p>
+        </div>
         <ion-item>
           <ion-label>Duração</ion-label>
           <div>{{ getRuntime() }}</div>
