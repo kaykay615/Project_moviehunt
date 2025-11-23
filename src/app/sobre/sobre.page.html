@@ -1,38 +1,420 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>sobre</ion-title>
-  </ion-toolbar>
-</ion-header>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação do Grupo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">sobre</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+        body {
+            background: #0a0a0a;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-<ion-tab-bar slot="bottom">
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
 
-  <ion-tab-button tab="favoritos" routerLink="/favoritos">
-    <ion-icon name="bookmark"></ion-icon>
-    <ion-label>Favoritos</ion-label>
-  </ion-tab-button>
+        .back-button:hover {
+            background: rgba(255, 0, 0, 0.3);
+            transform: translateX(-5px);
+        }
 
-  <ion-tab-button tab="home" routerLink="/home">
-    <ion-icon name="home"></ion-icon>
-    <ion-label>Home</ion-label>
-  </ion-tab-button>
+        header {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
 
-  <ion-tab-button tab="perfil" routerLink="/perfil">
-    <ion-icon name="person"></ion-icon>
-    <ion-label>Perfil</ion-label>
-  </ion-tab-button>
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
 
-  <ion-tab-button tab="perfil" routerLink="/sobre">
-    <ion-icon name="information-circle-outline"></ion-icon>
-    <ion-label>Sobre</ion-label>
-  </ion-tab-button>
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #ccc;
+        }
 
-</ion-tab-bar>
+        .members-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .member-card {
+            width: 320px;
+            height: 450px;
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.2);
+        }
+
+        .member-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .card-front {
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            border: 3px solid rgba(255, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .avatar::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .member-card:hover .avatar::after {
+            opacity: 1;
+        }
+
+        .avatar i {
+            font-size: 80px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .member-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .member-role {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            background: rgba(255, 0, 0, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: #ff4d4d;
+        }
+
+        .card-back {
+            background: linear-gradient(45deg, #1a1a1a, #0a0a0a);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .member-info {
+            margin-bottom: 25px;
+        }
+
+        .member-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .member-info p {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            color: #ccc;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links a:hover {
+            background: rgba(255, 0, 0, 0.3);
+            transform: translateY(-5px);
+            border-color: rgba(255, 0, 0, 0.5);
+        }
+
+        .lucas .card-front {
+            background: linear-gradient(45deg, #1a1a1a, #2a1a1a);
+        }
+
+        .lucas .avatar {
+            border-color: rgba(255, 50, 50, 0.6);
+        }
+
+        .kaique .card-front {
+            background: linear-gradient(45deg, #1a1a1a, #1a1a2a);
+        }
+
+        .kaique .avatar {
+            border-color: rgba(255, 100, 100, 0.6);
+        }
+
+        .kaio .card-front {
+            background: linear-gradient(45deg, #1a1a1a, #1a2a1a);
+        }
+
+        .kaio .avatar {
+            border-color: rgba(255, 150, 150, 0.6);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 40px;
+            font-size: 1rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .member-card {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .lucas {
+            animation-delay: 0.1s;
+        }
+
+        .kaique {
+            animation-delay: 0.2s;
+        }
+
+        .kaio {
+            animation-delay: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .members-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .member-card {
+                width: 90%;
+                max-width: 350px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .back-button {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="#" class="back-button" onclick="history.back()">
+            <i class="fas fa-arrow-left"></i>
+            Voltar
+        </a>
+
+        <header>
+            <h1>Integrantes</h1>
+            <p class="subtitle">Conheça um pouco sobre nossos criadores.</p>
+        </header>
+
+        <div class="members-container">
+            <!-- Lucas -->
+            <div class="member-card lucas">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="avatar">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h2 class="member-name">Lucas</h2>
+                        <p class="member-role">Frontend</p>
+                    </div>
+                    <div class="card-back">
+                        <div class="member-info">
+                            <h3>Lucas</h3>
+                            <p>🎨 Especialista em CSS e Front-End.</p>
+                            <p>👨‍🍳 Cozinha por paixão, cria por instinto.</p>
+                            <p>⚖️ Buscando a receita perfeita entre código e tempero.</p>
+                        </div>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kaique -->
+            <div class="member-card kaique">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="avatar">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h2 class="member-name">Kaique</h2>
+                        <p class="member-role">Cybersegurança</p>
+                    </div>
+                    <div class="card-back">
+                        <div class="member-info">
+                            <h3>Kaique</h3>
+                            <p>🔒 Especialista em Cybersecurity.</p>
+<p>🏃‍♂️ Amante de Esportes e Atividades ao Ar Livre.</p>
+<p>⚖️ Buscando sempre o equilíbrio entre a vida digital e a física.</p>
+                        </div>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kaio -->
+            <div class="member-card kaio">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="avatar">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h2 class="member-name">Kaio</h2>
+                        <p class="member-role">Back-End & APIS</p>
+                    </div>
+                    <div class="card-back">
+                        <div class="member-info">
+                            <h3>Kaio</h3>
+                            <p>⚙️ Especialista em Back-End & APIs.</p>
+                            <p>🎬 Maratonista de séries.</p>
+                            <p>🎮 Gamer nas horas vagas.</p>
+                            <p>🕹️ Encontro lógica tanto no código quanto nos games.</p>
+                        </div>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 Grupo Lucas, Kaique e Kaio. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Adiciona efeito de parallax ao fundo
+        document.body.addEventListener('mousemove', function(e) {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.005;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.005;
+            
+            document.querySelectorAll('.member-card').forEach(card => {
+                card.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
